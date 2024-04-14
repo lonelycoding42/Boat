@@ -2,8 +2,8 @@
 #include <esp_now.h>
 
 //摇杆引脚
-const int ana=32;
-const int car_v=33;
+const int ana=32; //行船方向 回复拉杆
+const int car_v=33; //行船速度 非回复拉杆
 
 // //RXTX数据接收
 // byte getData[2];
@@ -17,7 +17,7 @@ typedef struct struct_message {
 struct_message myData;
 
 // 接收设备的 MAC 地址
-uint8_t broadcastAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x2C, 0xE0};
+uint8_t broadcastAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x44, 0x28};//08:D1:F9:E7:44:28
 
 // //数据发送回调函数
 // void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
@@ -50,8 +50,8 @@ void setup() {
   pinMode(car_v,INPUT);
 
   //初始化串口
-  // Serial.begin(115200);
-  // Serial2.begin(921600);
+  Serial.begin(115200);
+  Serial2.begin(921600);
 
   // 初始化 ESP-NOW(if->while)
   WiFi.mode(WIFI_STA);
@@ -94,8 +94,8 @@ void loop() {
   myData.velocity=map(myData.velocity,0,4095,0,180);
 
   // //串口使用
-  // Serial.println(myData.pos);
-  // Serial.println(myData.velocity);
+  Serial.println(myData.pos);
+  Serial.println(myData.velocity);
 
   //发送数据
   esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
