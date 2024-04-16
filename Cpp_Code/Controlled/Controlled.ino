@@ -28,12 +28,11 @@ void setup() {
   //启用串口
   Serial.begin(9600);
 
-  // 初始化 ESP-NOW(if->while)
+  // 初始化 ESP-NOW
   WiFi.mode(WIFI_STA);
   while (esp_now_init() != 0) {
     Serial.println("Error initializing ESP-NOW");
     delay(100);
-    // return;
   }
 
   // 设置接收数据回调函数
