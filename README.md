@@ -158,9 +158,19 @@ void Task1code( void * pvParameters ){
 //Core_1操作
 void Task0code( void * pvParameters ){
   for(;;){
+    Serial.println(myData.pos);
+    Serial.println(angle_now);
     //控制舵机
-    myServo.write(myData.pos); 
-  } 
+    if(myData.pos>angle_now){
+      angle_now+=10;
+      angle_now=angle_now<myData.pos?angle_now:myData.pos;
+    }
+    else if(myData.pos<angle_now){
+      angle_now-=10;
+      angle_now=angle_now>myData.pos?angle_now:myData.pos;
+    }
+    myServo.write(angle_now);
+  }
 }
 
 void loop() {}
