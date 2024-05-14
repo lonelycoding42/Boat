@@ -54,7 +54,7 @@ void setup() {
   }
 
   //初始化舵机模块
-  myData.pos=90;
+  myData.pos=75;
   myData.velocity=0;
 }
 
