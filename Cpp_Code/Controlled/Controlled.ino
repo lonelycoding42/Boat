@@ -10,6 +10,7 @@ TaskHandle_t Task0;
 //创建舵机控制对象及电调控制对象
 Servo myServo; 
 const int servo_pin=33;
+int angle_now;
 Servo ESC;
 const int ESC_pin=32;
 
@@ -42,6 +43,7 @@ void setup() {
   // 舵机初始化
   myServo.attach(servo_pin);
   myData.pos=75;
+  angle_now=myData.pos;
 
   //PWM,启动!
   ESC.attach(ESC_pin,1000,2000);
@@ -83,9 +85,18 @@ void Task1code( void * pvParameters ){
 void Task0code( void * pvParameters ){
   for(;;){
     Serial.println(myData.pos);
+    Serial.println(angle_now);
     //控制舵机
-    myServo.write(myData.pos); 
-  } 
+    if(myData.pos>angle_now){
+      angle_now+=10;
+      angle_now=angle_now<myData.pos?angle_now:myData.pos;
+    }
+    else if(myData.pos<angle_now){
+      angle_now-=10;
+      angle_now=angle_now>myData.pos?angle_now:myData.pos;
+    }
+    myServo.write(angle_now);
+  }
 }
 
 void loop() {
