@@ -1,3 +1,4 @@
+#include "PID.h"
 #include <WiFi.h>
 #include <esp_now.h>
 #include <ESP32Servo.h>
@@ -8,6 +9,7 @@ TaskHandle_t Task0;
 
 //创建舵机控制对象及电调控制对象
 Servo myServo; 
+int angle_now;
 const int servo_pin=32;
 Servo ESC;
 const int ESC_pin=33;
@@ -64,7 +66,7 @@ void setup() {
                     NULL,        /* parameter of the task */
                     1,           /* priority of the task */
                     &Task0,      /* Task handle to keep track of created task */
-                    1);          /* pin task to core 0 */
+                    1);          /* pin task to core 1 */
 }
 
 //Core_0操作
@@ -82,7 +84,8 @@ void Task1code( void * pvParameters ){
 void Task0code( void * pvParameters ){
   for(;;){
     //控制舵机
-    myServo.write(myData.pos); 
+    
+    myServo.write(myData.pos);
   } 
 }
 
