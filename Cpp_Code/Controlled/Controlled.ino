@@ -9,10 +9,9 @@ TaskHandle_t Task0;
 
 //创建舵机控制对象及电调控制对象
 Servo myServo; 
-int angle_now;
-const int servo_pin=32;
+const int servo_pin=33;
 Servo ESC;
-const int ESC_pin=33;
+const int ESC_pin=32;
 
 // 设置数据结构体
 typedef struct struct_message {
@@ -28,7 +27,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 
 void setup() {
   //启用串口
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // 初始化 ESP-NOW
   WiFi.mode(WIFI_STA);
@@ -42,7 +41,7 @@ void setup() {
 
   // 舵机初始化
   myServo.attach(servo_pin);
-  myData.pos=135;
+  myData.pos=75;
 
   //PWM,启动!
   ESC.attach(ESC_pin,1000,2000);
@@ -76,16 +75,16 @@ void Task1code( void * pvParameters ){
     Serial.println(myData.velocity);
 
     //控制电调
-    ESC.write(myData.velocity);
+    ESC.write(myData.velocity/2);
   }
 }
 
 //Core_1操作
 void Task0code( void * pvParameters ){
   for(;;){
+    Serial.println(myData.pos);
     //控制舵机
-    
-    myServo.write(myData.pos);
+    myServo.write(myData.pos); 
   } 
 }
 
